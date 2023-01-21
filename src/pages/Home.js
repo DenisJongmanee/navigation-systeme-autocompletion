@@ -1,169 +1,163 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import '../App.css';
 import { GoogleMap, LoadScript, MarkerF } from '@react-google-maps/api';
-import TextField from 'react-autocomplete-input';
-import Autocomplete from 'react-autocomplete-input';
+import TextInput from 'react-autocomplete-input';
+import 'react-autocomplete-input/dist/bundle.css';
+import axios from 'axios';
+import Historique from "../components/Historique";
 
-function Home() {
-    const mapContainerStyle = {
-        position: "absolute",
-        top: 0,
-        right: 0,
-        width: "80%",
-        height: "100%"
-    }
+const mapContainerStyle = {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    width: "70%",
+    height: "100%"
+}
 
-    const center = {
-        lat: (48.8588897 + 50.6365654) / 2,
-        lng: (2.320041 + 3.0635282) / 2
-    }
+const center = {
+    lat: (48.8588897 + 50.6365654) / 2,
+    lng: (2.320041 + 3.0635282) / 2
+}
 
-    const destination = {
-        lat: 48.8588897,
-        lng: 2.320041
-    }
+const destination = {
+    lat: 48.8588897,
+    lng: 2.320041
+}
 
-    const origin = {
-        lat: 50.6365654,
-        lng: 3.0635282
-    }
+const origin = {
+    lat: 50.6365654,
+    lng: 3.0635282
+}
 
-    const onLoad = marker => {
-        console.log('marker: ', marker)
-    }
+const onLoad = marker => {
+    // console.log('marker: ', marker)
+}
+const Home = () => {
+
+    const [optionsInputDepart, setOptionsInputDepart] = useState([]);
+    const [optionsInputArrivee, setOptionsInputArrivee] = useState([]);
+    const [valueInputDepart, setValueInputDepart] = useState("");
+    const [valueInputArrivee, setValueInputArrivee] = useState("");
+    
+    const [historique, setHistorique] = useState([]);
+    
+    const [regions, setRegions] = useState([]);
+    const [regionDepart, setRegionDepart] = useState(null);
+    const [regionArrivee, setRegionArrivee] = useState(null);
+    
+    const [departmentsDepart, setDepartementsDepart] = useState([]);
+    const [departmentsArrivee, setDepartementsArrivee] = useState([]);
+    const [departmentDepart, setDepartmentDepart] = useState(null);
+    const [departmentArrivee, setDepartmentArrivee] = useState(null);
+
+    const [citiesDepart, setCitiesDepart] = useState([]);
+    const [citiesArivee, setCitiesArrivee] = useState([]);
+    const [cityDepart, setCityDepart] = useState(null);
+    const [cityArrivee, setCityArrivee] = useState(null);
+
+    const [coorCityDepart, setCoorCityDepart] = useState({});
+    const [coorCityArrivee, setCoorCityArrivee] = useState({});
+ 
+
+    useEffect(() => {
+        axios.get('http://127.0.0.1:3001/api/regions').then((response) => {
+            const data = response.data;
+            const regionNames = data.map((region) => {
+                return region.name;
+            });
+            setRegions(data);
+            setOptionsInputDepart(regionNames);
+            setOptionsInputArrivee(regionNames);
+        });
+    }, []);
 
 
-    const top100Films = [
-        { label: 'The Shawshank Redemption', year: 1994 },
-        { label: 'The Godfather', year: 1972 },
-        { label: 'The Godfather: Part II', year: 1974 },
-        { label: 'The Dark Knight', year: 2008 },
-        { label: '12 Angry Men', year: 1957 },
-        { label: "Schindler's List", year: 1993 },
-        { label: 'Pulp Fiction', year: 1994 },
-        {
-            label: 'The Lord of the Rings: The Return of the King',
-            year: 2003,
-        },
-        { label: 'The Good, the Bad and the Ugly', year: 1966 },
-        { label: 'Fight Club', year: 1999 },
-        {
-            label: 'The Lord of the Rings: The Fellowship of the Ring',
-            year: 2001,
-        },
-        {
-            label: 'Star Wars: Episode V - The Empire Strikes Back',
-            year: 1980,
-        },
-        { label: 'Forrest Gump', year: 1994 },
-        { label: 'Inception', year: 2010 },
-        {
-            label: 'The Lord of the Rings: The Two Towers',
-            year: 2002,
-        },
-        { label: "One Flew Over the Cuckoo's Nest", year: 1975 },
-        { label: 'Goodfellas', year: 1990 },
-        { label: 'The Matrix', year: 1999 },
-        { label: 'Seven Samurai', year: 1954 },
-        {
-            label: 'Star Wars: Episode IV - A New Hope',
-            year: 1977,
-        },
-        { label: 'City of God', year: 2002 },
-        { label: 'Se7en', year: 1995 },
-        { label: 'The Silence of the Lambs', year: 1991 },
-        { label: "It's a Wonderful Life", year: 1946 },
-        { label: 'Life Is Beautiful', year: 1997 },
-        { label: 'The Usual Suspects', year: 1995 },
-        { label: 'Léon: The Professional', year: 1994 },
-        { label: 'Spirited Away', year: 2001 },
-        { label: 'Saving Private Ryan', year: 1998 },
-        { label: 'Once Upon a Time in the West', year: 1968 },
-        { label: 'American History X', year: 1998 },
-        { label: 'Interstellar', year: 2014 },
-        { label: 'Casablanca', year: 1942 },
-        { label: 'City Lights', year: 1931 },
-        { label: 'Psycho', year: 1960 },
-        { label: 'The Green Mile', year: 1999 },
-        { label: 'The Intouchables', year: 2011 },
-        { label: 'Modern Times', year: 1936 },
-        { label: 'Raiders of the Lost Ark', year: 1981 },
-        { label: 'Rear Window', year: 1954 },
-        { label: 'The Pianist', year: 2002 },
-        { label: 'The Departed', year: 2006 },
-        { label: 'Terminator 2: Judgment Day', year: 1991 },
-        { label: 'Back to the Future', year: 1985 },
-        { label: 'Whiplash', year: 2014 },
-        { label: 'Gladiator', year: 2000 },
-        { label: 'Memento', year: 2000 },
-        { label: 'The Prestige', year: 2006 },
-        { label: 'The Lion King', year: 1994 },
-        { label: 'Apocalypse Now', year: 1979 },
-        { label: 'Alien', year: 1979 },
-        { label: 'Sunset Boulevard', year: 1950 },
-        {
-            label: 'Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb',
-            year: 1964,
-        },
-        { label: 'The Great Dictator', year: 1940 },
-        { label: 'Cinema Paradiso', year: 1988 },
-        { label: 'The Lives of Others', year: 2006 },
-        { label: 'Grave of the Fireflies', year: 1988 },
-        { label: 'Paths of Glory', year: 1957 },
-        { label: 'Django Unchained', year: 2012 },
-        { label: 'The Shining', year: 1980 },
-        { label: 'WALL·E', year: 2008 },
-        { label: 'American Beauty', year: 1999 },
-        { label: 'The Dark Knight Rises', year: 2012 },
-        { label: 'Princess Mononoke', year: 1997 },
-        { label: 'Aliens', year: 1986 },
-        { label: 'Oldboy', year: 2003 },
-        { label: 'Once Upon a Time in America', year: 1984 },
-        { label: 'Witness for the Prosecution', year: 1957 },
-        { label: 'Das Boot', year: 1981 },
-        { label: 'Citizen Kane', year: 1941 },
-        { label: 'North by Northwest', year: 1959 },
-        { label: 'Vertigo', year: 1958 },
-        {
-            label: 'Star Wars: Episode VI - Return of the Jedi',
-            year: 1983,
-        },
-        { label: 'Reservoir Dogs', year: 1992 },
-        { label: 'Braveheart', year: 1995 },
-        { label: 'M', year: 1931 },
-        { label: 'Requiem for a Dream', year: 2000 },
-        { label: 'Amélie', year: 2001 },
-        { label: 'A Clockwork Orange', year: 1971 },
-        { label: 'Like Stars on Earth', year: 2007 },
-        { label: 'Taxi Driver', year: 1976 },
-        { label: 'Lawrence of Arabia', year: 1962 },
-        { label: 'Double Indemnity', year: 1944 },
-        {
-            label: 'Eternal Sunshine of the Spotless Mind',
-            year: 2004,
-        },
-        { label: 'Amadeus', year: 1984 },
-        { label: 'To Kill a Mockingbird', year: 1962 },
-        { label: 'Toy Story 3', year: 2010 },
-        { label: 'Logan', year: 2017 },
-        { label: 'Full Metal Jacket', year: 1987 },
-        { label: 'Dangal', year: 2016 },
-        { label: 'The Sting', year: 1973 },
-        { label: '2001: A Space Odyssey', year: 1968 },
-        { label: "Singin' in the Rain", year: 1952 },
-        { label: 'Toy Story', year: 1995 },
-        { label: 'Bicycle Thieves', year: 1948 },
-        { label: 'The Kid', year: 1921 },
-        { label: 'Inglourious Basterds', year: 2009 },
-        { label: 'Snatch', year: 2000 },
-        { label: '3 Idiots', year: 2009 },
-        { label: 'Monty Python and the Holy Grail', year: 1975 },
-    ];
+    const selectInputDepart = (choice) => {
 
+        if (regionDepart === null) {
+            setRegionDepart(choice);
+            const region = regions.filter((region) => {
+                return region.name.trim() === choice.trim();
+            });
+            const codeRegion = region[0].code;
+            axios.get(`http://127.0.0.1:3001/api/departments/${codeRegion}`).then(response => {
+                const data = response.data;
+                const departmentsNames = data.map((department) => {
+                    return department.name;
+                });
+                setDepartementsDepart(data);
+                setOptionsInputDepart(departmentsNames);
+                setValueInputDepart("");
+            });
+        } else if (departmentDepart === null) {
+            setDepartmentDepart(choice);
+            const department = departmentsDepart.filter((department) => {
+                return department.name.trim() === choice.trim();
+            });
+            const codeDepartment = department[0].code;
+            axios.get(`http://127.0.0.1:3001/api/cities/${codeDepartment}`).then(response => {
+                const data = response.data;
+                const citiesNames = data.map((city) => {
+                    return `${city.name} -- ${city.zip_code}` ;
+                });
+                setCitiesDepart(data);
+                setOptionsInputDepart(citiesNames);
+                setValueInputDepart("");
+            });
+        } else {
+            setCityDepart(choice);
+        }
+    };
+
+    const selectInputArrivee = (choice) => {
+        if (regionArrivee === null) {
+            setRegionArrivee(choice);
+            const region = regions.filter((region) => {
+                return region.name.trim() === choice.trim();
+            });
+            const codeRegion = region[0].code;
+            axios.get(`http://127.0.0.1:3001/api/departments/${codeRegion}`).then(response => {
+                const data = response.data;
+                const departmentsNames = data.map((department) => {
+                    return department.name;
+                });
+                setDepartementsArrivee(data);
+                setOptionsInputArrivee(departmentsNames);
+                setValueInputArrivee("");
+            });
+        } else if (departmentArrivee === null) {
+            setDepartmentArrivee(choice);
+            const department = departmentsArrivee.filter((department) => {
+                return department.name.trim() === choice.trim();
+            });
+            const codeDepartment = department[0].code;
+            axios.get(`http://127.0.0.1:3001/api/cities/${codeDepartment}`).then(response => {
+                const data = response.data;
+                const citiesNames = data.map((city) => {
+                    return `${city.name} -- ${city.zip_code}` ;
+                });
+                setCitiesArrivee(data);
+                setOptionsInputArrivee(citiesNames);
+                setValueInputArrivee("");
+            });
+        } else {
+            setCityArrivee(choice);
+        }
+    };
 
     return (
-        <div className="Home">
-            <h1>Home Page</h1>
+        <div className="homepage">
+            <div className="sidebar">
+                <h1>Hess Map</h1>
+                <p className="label">Départ ({regionDepart === null ? "choisir la région" : "choisir le département"}) :</p>
+                <TextInput className="textInput" trigger={[""]} options={{ "": optionsInputDepart }} onSelect={selectInputDepart} value={valueInputDepart} onChange={(value) => setValueInputDepart(value)}/>
+                <p className="label">Arrivée ({regionArrivee === null ? "choisir la région" : "choisir le département"}) :</p>
+                <TextInput className="textInput" trigger={[""]} options={{ "": optionsInputArrivee }} onSelect={selectInputArrivee} value={valueInputArrivee} onChange={(value) => setValueInputArrivee(value)}/>
+                <p className="label">Historique :</p>
+                <Historique historique={historique} />
+            </div>
+
+
             <LoadScript
                 googleMapsApiKey="AIzaSyCjzCI3yJUBRRNwH822WmWNcOzFeFf-qvk"
             >
@@ -183,15 +177,9 @@ function Home() {
                     />
                 </GoogleMap>
             </LoadScript>
-            <Autocomplete
-                disablePortal
-                id="combo-box-demo"
-                options={top100Films}
-                sx={{ width: 300 }}
-                renderInput={(params) => <TextField {...params} label="Movie" />}
-            />
         </div>
     )
 }
+
 
 export default Home;

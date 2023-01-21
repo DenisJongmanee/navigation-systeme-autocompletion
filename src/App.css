@@ -1,4 +1,31 @@
-.App {
-  text-align: center;
+*{
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 30%;
+}
+
+h1{
+  color: #2596be;
+  margin-top: 1em;
+}
+
+.label{
+  font-size: 1.6em;
+  margin-top: 0.5em;
+}
+
+.textInput{
+  width: 15em;
+  height: 3em;
+  border-color: #2596be;
+  border-radius: 12px;
+  margin-top: 0.5em;
 }
 
