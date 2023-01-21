@@ -39,7 +39,33 @@ const Home = () => {
     const [valueInputDepart, setValueInputDepart] = useState("");
     const [valueInputArrivee, setValueInputArrivee] = useState("");
     
-    const [historique, setHistorique] = useState([]);
+    const [historique, setHistorique] = useState([
+        {
+            date : new Date(),
+            villeDepart: "Lille",
+            villeArrivee : "Paris"
+        },
+        {
+            date : new Date(),
+            villeDepart: "Lille",
+            villeArrivee : "Bercq"
+        },
+        {
+            date : new Date(),
+            villeDepart: "Paris",
+            villeArrivee : "Marseille"
+        },
+        {
+            date : new Date(),
+            villeDepart: "Nantes",
+            villeArrivee : "Nice"
+        },
+        {
+            date : new Date(),
+            villeDepart: "Strasbourg",
+            villeArrivee : "Rouen"
+        }
+    ]);
     
     const [regions, setRegions] = useState([]);
     const [regionDepart, setRegionDepart] = useState(null);
