@@ -1,9 +1,9 @@
-*{
+* {
   margin: 0;
   padding: 0;
 }
 
-.sidebar{
+.sidebar {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -11,17 +11,23 @@
   width: 30%;
 }
 
-h1{
+h1 {
   color: #2596be;
-  margin-top: 1em;
+  margin-top: 0.5em;
 }
 
-.label{
+.label {
   font-size: 1.6em;
   margin-top: 0.5em;
 }
 
-.textInput{
+.labelMeteo {
+  font-size: 1.6em;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.textInput {
   width: 15em;
   height: 3em;
   border-color: #2596be;
@@ -29,3 +35,46 @@ h1{
   margin-top: 0.5em;
 }
 
+.btnLancer {
+  width: 8em;
+  height: 3em;
+  margin-top: 0.6em;
+  margin-bottom: 1.5em;
+  background: linear-gradient(90deg, rgba(38,79,158,1) 0%, rgba(0,212,255,1) 100%);
+  border: none;
+  border-radius: 25px;
+}
+
+.btnReset{
+  width: 8em;
+  height: 3em;
+  margin-top: 1.5em;
+  background: linear-gradient(90deg, rgb(175, 39, 185) 0%, rgb(168, 14, 50) 100%);
+  border: none;
+  color: white;
+  border-radius: 25px;
+}
+
+.meteoDepart{
+  margin-bottom: 0.5em;
+  text-align: center;
+}
+
+.meteoArrivee{
+  margin-bottom: 0.5em;
+  text-align: center;
+}
+
+.list{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  list-style: none;
+  margin: 1em;
+}
+
+.list ul{
+  display: flex;
+  gap: 0.5em;
+}
